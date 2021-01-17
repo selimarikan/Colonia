@@ -27,6 +27,7 @@ private:
 public:
     WoodCamp(/* args */);
     ~WoodCamp();
+    void Tick();
 };
 
 WoodCamp::WoodCamp(/* args */)
@@ -37,6 +38,9 @@ WoodCamp::~WoodCamp()
 {
 }
 
+void WoodCamp::Tick()
+{
+}
 class ResourceBuilding : public Building
 {
 private:
@@ -44,6 +48,8 @@ private:
 public:
     ResourceBuilding(/* args */);
     ~ResourceBuilding();
+    // Calculates the resource output for that iteration
+    virtual void Tick();
 };
 
 ResourceBuilding::ResourceBuilding(/* args */)

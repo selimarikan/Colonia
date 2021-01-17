@@ -1,5 +1,6 @@
 #include "gui.h"
 #include "colony.h"
+#include "buildings.h"
 
 int main()
 {
@@ -9,6 +10,9 @@ int main()
     if (choice == 1)
     {
         Colony colony;
+
+        WoodCamp wc = WoodCamp();
+        colony.BuildBuilding(wc);
     }
     else
     {

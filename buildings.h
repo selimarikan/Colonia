@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "gui/menu.h"
+
 enum class ResourceType : char
 {
     NONE = 0,
@@ -50,16 +52,25 @@ public:
 
     // Type of resource needed for upgrade, amount of resource needed
     std::map<ResourceType, float> m_UpgradeCost;
+    // Returns the upgrade cost information as a string to be used in the UI
+    std::string GetUpgradeCostStr();
 
     void Info();
 
 private:
+    Menu m_Menu;
 };
 
 Building::Building(/* args */)
 {
     // Start as unbuilt building
     m_Level = 0;
+
+    // Default menu items
+    auto m0 = MenuItem(std::string("Return"));
+    auto m1 = MenuItem("Upgrade " + GetUpgradeCostStr());
+    m_Menu.AddItem(m0);
+    m_Menu.AddItem(m1);
 }
 
 Building::~Building()
@@ -69,6 +80,18 @@ Building::~Building()
 void Building::Upgrade()
 {
     m_Level++;
+}
+
+std::string Building::GetUpgradeCostStr()
+{
+    std::stringstream ss;
+    ss << "(";
+    for (auto const &x : m_UpgradeCost)
+    {
+        ss << ResourceToStr(x.first) << " : " << x.second << ", ";
+    }
+    ss << ")";
+    return ss.str();
 }
 
 void Building::Info()

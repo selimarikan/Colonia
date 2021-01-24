@@ -1,12 +1,13 @@
-#include "gui.h"
+#include "gui/gui.h"
 #include "colony.h"
 #include "buildings.h"
 
 int main()
 {
-    ShowIntro();
-    int choice = Read<int>();
+    MenuHandler mh;
+    mh.BuildMenus();
 
+    int choice = mh.ShowMenu("mainmenu");
     if (choice == 1)
     {
         Colony colony;

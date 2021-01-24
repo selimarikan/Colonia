@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <map>
+
 #include <sstream>
 #include <string>
 #include <vector>
@@ -47,6 +47,7 @@ struct FullMenuPage : Page
 
     int Show() const
     {
+        CLS();
         std::cout << top;
         std::cout << title << "\n";
         std::cout << description << "\n";
@@ -65,30 +66,5 @@ struct FullMenuPage : Page
 
         int response = Read<int>();
         return response;
-    }
-};
-
-// Holds all menu contents
-struct MenuHandler
-{
-    std::map<std::string, FullMenuPage> menus;
-
-    // Construct all static game content here
-    void BuildMenus()
-    {
-        // MAIN MENU
-        FullMenuPage mp(std::string("COLONIA"), std::string("v0.1"));
-        MenuItem m1 = MenuItem("Start");
-        MenuItem m2 = MenuItem("Exit");
-        mp.menu.AddItem(m1);
-        mp.menu.AddItem(m2);
-
-        menus["mainmenu"] = mp;
-    }
-
-    int ShowMenu(std::string menuKey)
-    {
-        CLS();
-        return menus[menuKey].Show();
     }
 };

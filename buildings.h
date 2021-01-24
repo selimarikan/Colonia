@@ -47,6 +47,9 @@ public:
     //  Building itself will not check the resources
     void Upgrade();
 
+    // Enter the building in the UI
+    void Enter();
+
     std::string m_Name;
     int m_Level;
 
@@ -57,8 +60,8 @@ public:
 
     void Info();
 
-private:
-    Menu m_Menu;
+protected:
+    FullMenuPage m_MenuPage;
 };
 
 Building::Building(/* args */)
@@ -67,10 +70,11 @@ Building::Building(/* args */)
     m_Level = 0;
 
     // Default menu items
+    m_MenuPage = FullMenuPage("BuildingTitle", "BuildingDescription");
     auto m0 = MenuItem(std::string("Return"));
     auto m1 = MenuItem("Upgrade " + GetUpgradeCostStr());
-    m_Menu.AddItem(m0);
-    m_Menu.AddItem(m1);
+    m_MenuPage.menu.AddItem(m0);
+    m_MenuPage.menu.AddItem(m1);
 }
 
 Building::~Building()
@@ -80,6 +84,11 @@ Building::~Building()
 void Building::Upgrade()
 {
     m_Level++;
+}
+
+void Building::Enter()
+{
+    m_MenuPage.Show();
 }
 
 std::string Building::GetUpgradeCostStr()
@@ -176,7 +185,11 @@ WoodCamp::WoodCamp(/* args */)
     m_UpgradeCost[ResourceType::STONE] = 500;
     m_Name = "Wood Camp";
 
-    Info();
+    // Customize the building menu
+    m_MenuPage.title = m_Name + " Level " + std::to_string(m_Level);
+    m_MenuPage.description = "Provides steady wood income by cutting and reseeding the forest.";
+    auto m0 = MenuItem("Info");
+    m_MenuPage.menu.AddItem(m0);
 }
 
 WoodCamp::~WoodCamp()

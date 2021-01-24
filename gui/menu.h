@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -12,6 +13,8 @@ struct MenuItem
 {
     std::string text;
     int index;
+    // A custom functionality / callback can be implemented using the 'func'
+    std::function<void()> func;
 
     MenuItem(std::string t)
     {
@@ -23,6 +26,10 @@ struct MenuItem
         // TODO: Optimize later -> Knuth
         ss << DEFPAD << DEFLB << index << "] " << text << NEWL;
         return ss.str();
+    }
+    void Run() const
+    {
+        func();
     }
 };
 

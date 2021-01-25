@@ -51,6 +51,31 @@ static void glfw_error_callback(int error, const char *description)
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
+struct IMDialog
+{
+    char *title;
+    char *description;
+    bool *pClose;
+
+    IMDialog(const char *titleTxt, const char *descrText, bool *close)
+    {
+        title = titleTxt;
+        description = descrText;
+        pClose = close;
+    }
+
+    void Get()
+    {
+        // Pass a pointer to our bool variable
+        //  (the window will have a closing button that will clear the bool when clicked)
+        ImGui::Begin(title, pClose);
+        ImGui::Text(description);
+        if (ImGui::Button("Close Me"))
+            show_another_window = false;
+        ImGui::End();
+    }
+};
+
 struct IMGUI
 {
     int winWidth = 1280;
@@ -62,6 +87,15 @@ struct IMGUI
     bool show_demo_window = true;
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    void BuildingView(const char *buildingName)
+    {
+        ImGui::Begin(buildingName, false); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        ImGui::Text("Hello from another window!");
+        if (ImGui::Button("Close Me"))
+            show_another_window = false;
+        ImGui::End();
+    }
 
     void Loop()
     {

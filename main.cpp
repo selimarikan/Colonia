@@ -9,6 +9,8 @@ int main()
 {
     // GameManager gm;
 
-    dearmain(1, nullptr);
+    IMGUI gui;
+    gui.Init();
+    gui.Dispose();
     return 0;
 }

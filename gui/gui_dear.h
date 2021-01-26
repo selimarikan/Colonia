@@ -53,26 +53,29 @@ static void glfw_error_callback(int error, const char *description)
 
 struct IMDialog
 {
-    char *title;
-    char *description;
-    bool *pClose;
+    const char *title;
+    const char *description;
+    bool close;
 
-    IMDialog(const char *titleTxt, const char *descrText, bool *close)
+    IMDialog(const char *titleTxt, const char *descrText, bool &shouldClose)
     {
         title = titleTxt;
         description = descrText;
-        pClose = close;
+        close = shouldClose;
     }
 
     void Get()
     {
-        // Pass a pointer to our bool variable
-        //  (the window will have a closing button that will clear the bool when clicked)
-        ImGui::Begin(title, pClose);
-        ImGui::Text(description);
-        if (ImGui::Button("Close Me"))
-            show_another_window = false;
-        ImGui::End();
+        if (!close)
+        {
+            // Pass a pointer to our bool variable
+            //  (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Begin(title, &close);
+            ImGui::Text(description);
+            if (ImGui::Button("Close Me"))
+                close = true;
+            ImGui::End();
+        }
     }
 };
 
@@ -87,6 +90,13 @@ struct IMGUI
     bool show_demo_window = true;
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    std::vector<IMDialog> dialogs;
+
+    IMGUI()
+    {
+        dialogs.reserve(100);
+    }
 
     void BuildingView(const char *buildingName)
     {
@@ -130,7 +140,12 @@ struct IMGUI
             ImGui::ColorEdit3("clear color", (float *)&clear_color); // Edit 3 floats representing a color
 
             if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
+            {
+                bool close = false;
+                IMDialog id("Test Title", "Test TExt", close);
+                dialogs.emplace_back(id);
+            }
+            // counter++;
             ImGui::SameLine();
             ImGui::Text("counter = %d", counter);
 
@@ -146,6 +161,11 @@ struct IMGUI
             if (ImGui::Button("Close Me"))
                 show_another_window = false;
             ImGui::End();
+        }
+
+        for (size_t iDialog = 0; iDialog < dialogs.size(); iDialog++)
+        {
+            dialogs[iDialog].Get();
         }
 
         // Rendering
